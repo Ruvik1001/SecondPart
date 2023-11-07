@@ -1,9 +1,11 @@
 package com.example.seven.screens.first
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -76,15 +78,29 @@ fun FirstScreen(paddingValues: PaddingValues, viewModel: FirstScreenViewModel) {
                     val url = viewModel.url.value
 
                     try {
-                        var image = loadImageFromNetwork(url)
+                        val image = loadImageFromNetwork(url)
                         async {
                             saveImageToInternalStorage(image, viewModel.context)
+                            (viewModel.context as Activity).runOnUiThread {
+                                Toast.makeText(
+                                    viewModel.context,
+                                    "Image loaded!",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                viewModel.url.value = ""
+                            }
                         }
                     } catch (e: Exception) {
+                        (viewModel.context as Activity).runOnUiThread {
+                            Toast.makeText(
+                                viewModel.context,
+                                "Error: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                         Log.e("MyTag", "Load from URL error: ${e.message}")
                     }
 
-                    viewModel.url.value = ""
                 }
             }
         ) {

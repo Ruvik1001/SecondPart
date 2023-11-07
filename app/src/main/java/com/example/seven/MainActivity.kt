@@ -8,15 +8,17 @@ import androidx.lifecycle.get
 import com.example.seven.screens.first.FirstScreenViewModel
 import com.example.seven.screens.first.FirstScreenViewModelFactory
 import com.example.seven.screens.host.HostViewModel
+import com.example.seven.screens.host.HostViewModelFactory
 import com.example.seven.screens.host.StartHost
 import com.example.seven.screens.second.SecondScreenViewModel
 import com.example.seven.screens.second.SecondScreenViewModelFactory
+import com.example.seven.ui.theme.MyTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val hostViewModel = ViewModelProvider(this)
+        val hostViewModel = ViewModelProvider(this, HostViewModelFactory(this))
             .get(HostViewModel::class.java)
 
         val firstScreenViewModel = ViewModelProvider(this, FirstScreenViewModelFactory(this))
@@ -24,13 +26,15 @@ class MainActivity : ComponentActivity() {
 
         val secondScreenViewModel = ViewModelProvider(this, SecondScreenViewModelFactory(this))
             .get(SecondScreenViewModel::class.java)
-
+        
         setContent {
-            StartHost(
-                hostViewModel,
-                firstScreenViewModel,
-                secondScreenViewModel
-            )
+            MyTheme {
+                StartHost(
+                    hostViewModel,
+                    firstScreenViewModel,
+                    secondScreenViewModel
+                )
+            }
         }
     }
 }
