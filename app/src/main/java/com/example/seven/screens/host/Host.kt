@@ -1,9 +1,10 @@
 package com.example.seven.screens.host
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.AccountBox
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,23 +30,26 @@ import com.example.seven.screens.first.LoadingScreen
 import com.example.seven.screens.first.LoadingViewModel
 import com.example.seven.screens.second.SeePhotoScreen
 import com.example.seven.screens.second.SeePhotoViewModel
+import com.example.seven.screens.third.ProfileScreen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartHost(
+fun InitAndShow(
     hostViewModel: HostViewModel,
     loadingViewModel: LoadingViewModel,
     seePhotoViewModel: SeePhotoViewModel,
 ) {
     val navController = rememberNavController()
+
     val coroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = hostViewModel.drawerState.value)
     var currentScreen by remember { mutableStateOf(hostViewModel.currentScreen.value) }
     var alertInfo by remember { mutableStateOf(hostViewModel.alertInfo.value) }
     val listOfButtons = listOf<Triple<ImageVector, String, () -> Unit>>(
-        Triple(Icons.Default.Add, "Поиск фото") {currentScreen = Screen.FirstScreen },
-        Triple(Icons.Default.Person, "Просмотр") {currentScreen = Screen.SecondScreen }
+        Triple(Icons.Default.Search, "Поиск фото") {currentScreen = Screen.FirstScreen },
+        Triple(Icons.Rounded.Star, "Просмотр") {currentScreen = Screen.SecondScreen },
+        Triple(Icons.Rounded.AccountBox, "Мой профиль") {currentScreen = Screen.ThirdScreen}
     )
 
     LaunchedEffect(drawerState.isClosed) {
@@ -74,20 +78,22 @@ fun StartHost(
                     label = when (currentScreen) {
                         Screen.FirstScreen -> "Поиск фото"
                         Screen.SecondScreen -> "Просмотр"
+                        Screen.ThirdScreen -> "Мой профиль"
                         Screen.AlertScreen -> ""
                                                  },
 
                     action = {
-                        when(currentScreen) {
-                            Screen.SecondScreen ->
-                                IconButton(onClick = {
-                                    currentScreen = Screen.AlertScreen
-                                    alertInfo = hostViewModel.alertMap[AlertActions.Delete]!!
-                                }) {
-                                    Icon(imageVector = Icons.Default.Delete, contentDescription = null)
-                                }
-                            else -> {}
-                        }
+//                        when(currentScreen) {
+//                            Screen.SecondScreen ->
+//                                IconButton(onClick = {
+//                                    currentScreen = Screen.AlertScreen
+//                                    alertInfo = hostViewModel.alertMap[AlertActions.Delete]!!
+//                                }) {
+//                                    Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+//                                }
+//                            else -> {}
+
+//                        }
                     }
 
                 ) {
@@ -105,6 +111,7 @@ fun StartHost(
                 when (currentScreen) {
                     Screen.FirstScreen -> LoadingScreen(paddingValues, loadingViewModel)
                     Screen.SecondScreen -> SeePhotoScreen(paddingValues, seePhotoViewModel)
+                    Screen.ThirdScreen -> ProfileScreen(paddingValues)
                     Screen.AlertScreen -> GetAlert(
                         label = alertInfo.label,
                         text = alertInfo.text,

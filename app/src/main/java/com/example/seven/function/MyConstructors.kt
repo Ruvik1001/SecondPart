@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.example.seven.data.Screen
 import com.example.seven.screens.host.AlertInfo
 import com.example.seven.screens.second.removeLocalPhotos
+import com.example.seven.ui.theme.Purple40
 import com.example.seven.ui.theme.PurpleGrey40
 import com.example.seven.ui.theme.backgroundColor
 import com.example.seven.ui.theme.buttonColor
@@ -73,7 +74,7 @@ fun GetTopAppBar(
             action()
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = Color.Blue,
+            containerColor = Purple40,
             titleContentColor = Color.White,
             navigationIconContentColor = Color.White,
             actionIconContentColor = Color.White
@@ -88,7 +89,7 @@ fun GetBottomAppBar(listOfButtons: List<Triple<ImageVector, String, () -> Unit>>
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentSize(Alignment.Center),
-        containerColor = Color.Blue,
+        containerColor = Purple40,
         contentColor = Color.White
     ) {
         LazyRow(

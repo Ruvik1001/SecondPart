@@ -28,29 +28,29 @@ fun SeePhotoScreen(paddingValues: PaddingValues, viewModel: SeePhotoViewModel) {
         modifier = Modifier.fillMaxSize().padding(paddingValues)
     ) {
         itemsIndexed(localPhotos) { _, photoFile ->
-            val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-            val imageBitmap = remember { bitmap.asImageBitmap() }
-            PhotoItem(photo = imageBitmap)
+            val imageBitmap = remember {
+                BitmapFactory
+                    .decodeFile(photoFile.absolutePath)
+                    .asImageBitmap()
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .aspectRatio(1f)
+            ) {
+                Image(
+                    bitmap = imageBitmap,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
     }
 }
 
-@Composable
-fun PhotoItem(photo: ImageBitmap) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .aspectRatio(1f)
-    ) {
-        Image(
-            bitmap = photo,
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.Crop
-        )
-    }
-}
 
 private fun loadLocalPhotos(context: Context): List<File> {
     val directory = context.filesDir

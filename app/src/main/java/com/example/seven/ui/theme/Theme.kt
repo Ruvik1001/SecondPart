@@ -39,10 +39,17 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+
+private val lightColorPalette = lightColorScheme(
+    background = backgroundColor,
+    primary = buttonColor,
+)
+
+private val darkColorPalette = lightColorPalette
+
 @Composable
 fun SevenTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -66,25 +73,20 @@ fun SevenTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = myTypography,
         content = content
     )
 }
 
-private val lightColorPalette = lightColorScheme(
-    background = backgroundColor,
-    primary = buttonColor,
-    //surfaceVariant = , //Drawer item BG
-    //surface = , //DrawerBG
-)
-
-private val darkColorPalette = lightColorPalette
 
 @Composable
 fun MyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    SevenTheme {
+
+    }
     MaterialTheme(
         colorScheme = if (darkTheme) darkColorPalette else lightColorPalette,
         typography = myTypography,

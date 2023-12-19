@@ -65,6 +65,7 @@ fun LoadingScreen(
                 value = viewModel.url.value,
                 onValueChange = { viewModel.url.value = it },
                 textStyle = TextStyle(fontSize = 18.sp),
+
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .weight(1f)
@@ -106,23 +107,10 @@ fun LoadingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "ИКБО-06-21",
-            fontSize = 20.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
 
-        Text(
-            text = "Руднев В.В.",
-            fontSize = 20.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
 
-        if (showErrorDialog) {
-            // Добавьте диалоговое окно для отображения ошибки
-            // Используйте значение errorMessage для отображения текста ошибки
-            // и добавьте кнопку для закрытия диалога
-        }
+//        if (showErrorDialog) {
+//        }
     }
 }
 

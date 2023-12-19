@@ -11,10 +11,10 @@ val PurpleGrey40 = Color(0xe7e0ec)
 val Pink40 = Color(0xFF7D5260)
 val Gray = Color(0xFF999999)
 
-val scaffoldColor = Color.Blue
+val scaffoldColor = Purple40
 val scaffoldTextColor = Color.White
 val mainTextColor = Color.Black
-val buttonColor = Color.Gray
+val buttonColor = Purple40
 val buttonTextColor = Color.White
 val backgroundColor = Color.White
 val inputTextColor = Color.Gray
