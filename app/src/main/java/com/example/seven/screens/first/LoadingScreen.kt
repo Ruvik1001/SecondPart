@@ -1,64 +1,64 @@
 package com.example.seven.screens.first
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.io.FileOutputStream
 import com.example.seven.ui.theme.Gray
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.net.URL
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 @Composable
-fun FirstScreen(paddingValues: PaddingValues, viewModel: FirstScreenViewModel) {
+fun LoadingScreen(
+    paddingValues: PaddingValues,
+    viewModel: LoadingViewModel
+) {
     val coroutineScope = rememberCoroutineScope()
+
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
-            .fillMaxSize(1f)
-            .wrapContentSize(Alignment.Center)
+            .fillMaxSize()
             .padding(paddingValues)
             .verticalScroll(rememberScrollState())
+            .background(Color.White)
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
-            text = "Загрузите ваше фото!",
+            text = "Добро пожаловать!",
             fontSize = 24.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 16.dp)
         )
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(bottom = 16.dp)
-                .wrapContentSize(Alignment.Center)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             Text("URL: ", fontSize = 18.sp)
             BasicTextField(
@@ -67,60 +67,62 @@ fun FirstScreen(paddingValues: PaddingValues, viewModel: FirstScreenViewModel) {
                 textStyle = TextStyle(fontSize = 18.sp),
                 modifier = Modifier
                     .padding(start = 8.dp)
-                    .fillMaxWidth(0.8f)
+                    .weight(1f)
                     .background(Gray)
             )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(horizontal = 16.dp),
             onClick = {
                 coroutineScope.launch(Dispatchers.IO) {
                     val url = viewModel.url.value
 
                     try {
                         val image = loadImageFromNetwork(url)
-                        async {
-                            saveImageToInternalStorage(image, viewModel.context)
-                            (viewModel.context as Activity).runOnUiThread {
-                                Toast.makeText(
-                                    viewModel.context,
-                                    "Image loaded!",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                viewModel.url.value = ""
-                            }
-                        }
-                    } catch (e: Exception) {
-                        (viewModel.context as Activity).runOnUiThread {
+                        saveImageToInternalStorage(image, viewModel.context)
+
+                        withContext(Dispatchers.Main) {
                             Toast.makeText(
                                 viewModel.context,
-                                "Error: ${e.message}",
+                                "Изображение загружено!",
                                 Toast.LENGTH_LONG
                             ).show()
+                            viewModel.url.value = ""
                         }
-                        Log.e("MyTag", "Load from URL error: ${e.message}")
+                    } catch (e: Exception) {
+                        errorMessage = "Ошибка загрузки изображения: ${e.message}"
+                        showErrorDialog = true
                     }
-
                 }
             }
         ) {
             Text("Загрузить")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "ИКБО-06-21",
             fontSize = 20.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 30.dp)
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
+
         Text(
             text = "Руднев В.В.",
             fontSize = 20.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
+        if (showErrorDialog) {
+            // Добавьте диалоговое окно для отображения ошибки
+            // Используйте значение errorMessage для отображения текста ошибки
+            // и добавьте кнопку для закрытия диалога
+        }
     }
 }
 

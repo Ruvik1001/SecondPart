@@ -5,6 +5,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
-class FirstScreenViewModel(val context: Context): ViewModel() {
+class LoadingViewModel(val context: Context): ViewModel() {
     var url: MutableState<String> = mutableStateOf("")
 }

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import java.io.File
 
 @Composable
-fun SecondScreen(paddingValues: PaddingValues, viewModel: SecondScreenViewModel) {
+fun SeePhotoScreen(paddingValues: PaddingValues, viewModel: SeePhotoViewModel) {
     val localPhotos = loadLocalPhotos(viewModel.context)
 
     LazyColumn(

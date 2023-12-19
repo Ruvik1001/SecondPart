@@ -4,12 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,19 +25,18 @@ import com.example.seven.function.GetDrawer
 import com.example.seven.function.GetDrawerContent
 import com.example.seven.function.GetScaffold
 import com.example.seven.function.GetTopAppBar
-import com.example.seven.screens.first.FirstScreen
-import com.example.seven.screens.first.FirstScreenViewModel
-import com.example.seven.screens.second.removeLocalPhotos
-import com.example.seven.screens.second.SecondScreen
-import com.example.seven.screens.second.SecondScreenViewModel
+import com.example.seven.screens.first.LoadingScreen
+import com.example.seven.screens.first.LoadingViewModel
+import com.example.seven.screens.second.SeePhotoScreen
+import com.example.seven.screens.second.SeePhotoViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartHost(
     hostViewModel: HostViewModel,
-    firstScreenViewModel: FirstScreenViewModel,
-    secondScreenViewModel: SecondScreenViewModel,
+    loadingViewModel: LoadingViewModel,
+    seePhotoViewModel: SeePhotoViewModel,
 ) {
     val navController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
@@ -48,8 +44,8 @@ fun StartHost(
     var currentScreen by remember { mutableStateOf(hostViewModel.currentScreen.value) }
     var alertInfo by remember { mutableStateOf(hostViewModel.alertInfo.value) }
     val listOfButtons = listOf<Triple<ImageVector, String, () -> Unit>>(
-        Triple(Icons.Default.Add, "Загрузить") {currentScreen = Screen.FirstScreen },
-        Triple(Icons.Default.Person, "Галерея") {currentScreen = Screen.SecondScreen }
+        Triple(Icons.Default.Add, "Поиск фото") {currentScreen = Screen.FirstScreen },
+        Triple(Icons.Default.Person, "Просмотр") {currentScreen = Screen.SecondScreen }
     )
 
     LaunchedEffect(drawerState.isClosed) {
@@ -76,8 +72,8 @@ fun StartHost(
             topAppBar = {
                 GetTopAppBar(
                     label = when (currentScreen) {
-                        Screen.FirstScreen -> "Загрузить"
-                        Screen.SecondScreen -> "Галерея"
+                        Screen.FirstScreen -> "Поиск фото"
+                        Screen.SecondScreen -> "Просмотр"
                         Screen.AlertScreen -> ""
                                                  },
 
@@ -107,8 +103,8 @@ fun StartHost(
 
             mainContent = { paddingValues ->
                 when (currentScreen) {
-                    Screen.FirstScreen -> FirstScreen(paddingValues, firstScreenViewModel)
-                    Screen.SecondScreen -> SecondScreen(paddingValues, secondScreenViewModel)
+                    Screen.FirstScreen -> LoadingScreen(paddingValues, loadingViewModel)
+                    Screen.SecondScreen -> SeePhotoScreen(paddingValues, seePhotoViewModel)
                     Screen.AlertScreen -> GetAlert(
                         label = alertInfo.label,
                         text = alertInfo.text,
